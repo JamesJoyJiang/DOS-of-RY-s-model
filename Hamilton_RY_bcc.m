@@ -48,8 +48,8 @@ end;
 for im=1:N
     for in=1:N
       hxp(id(:,N,im,in),id(:,1,im,in))=(-i*s_x-s_z)/2;
-      hyp(id(:,im,1,in),id(:,im,1,in))=  (-i*s_y-s_z)/2;
-      hzp(id(:,im,in,1),id(:,im,in,1))=  (-s_z)/2;
+      hyp(id(:,im,N,in),id(:,im,1,in))=  (-i*s_y-s_z)/2;
+      hzp(id(:,im,in,N),id(:,im,in,1))=  (-s_z)/2;
     end;
 end
 

@@ -1,6 +1,10 @@
 
 KPM_parameters;
 H0=Hamilton_RY_bcc();
+
+filename=strcat('Gamma= ',num2str(gamma),',Disorder= ',...
+    num2str(W), ',N=',num2str(N));
+filename
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  diagonal terms   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 fff(N_disorder,Mb)=0;
@@ -10,7 +14,7 @@ B_disorder(N_disorder)=0;
 opts.disp=0; 
 dim=2*N^3;
 
-for n_disorder=1:N_disorder
+parfor n_disorder=1:N_disorder
 ss=W*(rand(dim,1)-0.5);
 h0=sparse(reshape(id,dim,1),reshape(id,dim,1),ss,dim,dim);  %on-site disorder
 
@@ -20,20 +24,22 @@ n_disorder
 H=h0+H0;
 
   v=eigs(H,2, 'LM',opts);
+  v=sort(v);
   if (prod(v)>0)
      return;
   end
 a=(v(2)-v(1))/(2-eplison);
 b=(v(2)+v(1))/2;
 [a,b];
-A_disorder(n_disorder)=a;
-B_disorder(n_disorder)=b;
+A_disorder(n_disorder)=v(1);
+B_disorder(n_disorder)=v(2);
 issparse(H);
 H=(H-b*speye(dim))/a;
 %issparse(H);
 %toc;
 %tic;
-"now expansion";
+%"now expansion";
+%v;return
 
 mu=0;mu(M-1)=0;
 mu0=0;
@@ -82,6 +88,13 @@ x=x*a+b;  %normaliztion: 2017
 fff(n_disorder,:)=f/a; %normaliztion: 2017
 plot(x,sum(fff,1)/n_disorder);
 
+figure; plot(x,sum(fff,1)/n_disorder); ylabel('DOS');xlabel('E');
+title(filename);
+savefig(strcat(filename,'DOS','.fig'));
+
+S = struct('E_region',E_region,'DOS',DOS,'fff',real(fff));
+filenamemat=strcat(filename,'.mat')
+save(filenamemat,'S');
 
 end
 

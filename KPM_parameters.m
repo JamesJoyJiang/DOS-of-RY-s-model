@@ -2,7 +2,7 @@
 clear;
 global id N gamma ic
 sq3=sqrt(3d0);ic=sqrt(-1);
-N=30; % the lattice sze for each dimension(Nx=Ny=Nz)
+N=50; % the lattice sze for each dimension(Nx=Ny=Nz)
 
 gamma=0.5;
 

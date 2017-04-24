@@ -1,9 +1,9 @@
 
-N=30;NE=2000;
+N=50;NE=2000;Emax=6;
 rho=0;rho(NE)=0;
 
 s_x=[0,1;1,0];s_y=[0,-ic;ic,0];s_z=[1,0;0,-1];eye2=eye(2);
-eta=10^-4;
+eta=10^-3;
 
 for kx=-pi:2*pi/N:pi-2*pi/N
     for ky=-pi:2*pi/N:pi-2*pi/N
@@ -13,7 +13,7 @@ for kx=-pi:2*pi/N:pi-2*pi/N
           
           for s=1:2
               nE=0;
-            for EE=-1:2/NE:1-2/NE;
+            for EE=-Emax:2*Emax/NE:Emax-2*Emax/NE;
               nE=nE+1;
               rho(nE)=rho(nE)+eta*((EE-r(s))^2+eta^2)^-1;
             end;
@@ -21,4 +21,4 @@ for kx=-pi:2*pi/N:pi-2*pi/N
         end;
     end;
 end
-figure;plot(-1:2/NE:1-2/NE,rho)
+figure;plot(-Emax:2*Emax/NE:Emax-2*Emax/NE,rho)
