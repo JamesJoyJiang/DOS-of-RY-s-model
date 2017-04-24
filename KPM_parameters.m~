@@ -1,0 +1,58 @@
+
+clear;
+global id N gamma ic
+sq3=sqrt(3d0);ic=sqrt(-1);
+N=10; % the lattice sze for each dimension(Nx=Ny=Nz)
+
+gamma=0.5;
+
+
+
+M=2000;  %the expansion terms
+Mb=2*M;  %number of the data points
+N_disorder=1;  %number of disorder configurations :self-avareage is important!
+
+R=100;      % random integration
+eplison=1d-3;
+W=0; %the strength of disorder
+
+i=0;
+Jac0=0;Jac=0;
+Jac0=1/(M+1)*((M-i+1)*cos(pi*i/(M+1))+sin(pi*i/(M+1))*cot(pi/(M+1)));
+for i=1:M-1
+Jac(i)=1/(M+1)*((M-i+1)*cos(pi*i/(M+1))+sin(pi*i/(M+1))*cot(pi/(M+1)));
+end;
+
+id=0;
+for nz=1:N
+    for ny=1:N
+        for nx=1:N
+            for a=1:2
+              id(a,nx,ny,nz)=a+(nx-1)*2+(ny-1)*N*2+(nz-1)*N^2*2;
+            end
+        end;
+    end;
+end;
+
+N=20;NE=2000;
+rho=0;rho(NE)=0;
+s_x=[0,1;1,0];s_y=[0,-ic;ic,0];s_z=[1,0;0,-1];eye2=eye(2);
+eta=10^-4;
+for kx=-pi:2*pi/N:pi-2*pi/N
+    for ky=-pi:2*pi/N:pi-2*pi/N
+        for kz=-pi:2*pi/N:pi-2*pi/N
+          Hj=(2+gamma-cos(kx)-cos(ky)-cos(kz))*s_z+sin(kx)*s_x+sin(ky)*s_y;
+          r=eig(Hj);
+          
+          for s=1:2
+              nE=0;
+            for EE=-1:2/NE:1-2/NE;
+              nE=nE+1;
+              rho(nE)=rho(nE)+eta*((EE-r(s))^2+eta^2)^-1;
+            end;
+          end;
+        end;
+    end;
+end
+plot(EE=-1:2/NE:1-2/NE,rho)
+    
